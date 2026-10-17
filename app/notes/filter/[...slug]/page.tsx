@@ -6,6 +6,45 @@ import {
   QueryClient,
 } from '@tanstack/react-query';
 import { fetchNotes } from '@/lib/api/notes';
+import type { Metadata } from 'next';
+
+type Props = {
+  params: Promise<{ slug: string[] }>;
+};
+
+export async function generateMetadata({
+  params,
+}: Props): Promise<Metadata> {
+  const resolvedParams = await params;
+  const filterTag = resolvedParams.slug[0] || 'all';
+
+  const formattedTag =
+    filterTag.charAt(0).toUpperCase() + filterTag.slice(1);
+
+  const pageTitle =
+    'Notes filtered by tag: ${formattedTag} | NoteHub';
+
+  const pageDescription =
+    'View a list of notes filtrated by a category ${formattedTag}.';
+
+  return {
+    title: pageTitle,
+    description: pageDescription,
+    openGraph: {
+      title: pageTitle,
+      description: pageDescription,
+      url: 'https://notehub.com/',
+      images: [
+        {
+          url: 'https://ac.goit.global/fullstack/react/notehub-og-meta.jpg',
+          width: 1200,
+          height: 630,
+          alt: `NoteHub Filter - ${formattedTag}`,
+        },
+      ],
+    },
+  };
+}
 
 export default async function FilteredNotesPage({
   params,

@@ -7,6 +7,7 @@ import {
   useQueryClient,
 } from '@tanstack/react-query';
 import { createNote } from '../../lib/api';
+import { useRouter } from 'next/navigation';
 
 const NoteSchema = Yup.object().shape({
   title: Yup.string()
@@ -26,11 +27,13 @@ const NoteSchema = Yup.object().shape({
 });
 
 interface NoteFormProps {
-  onClose: () => void;
+  onClose?: () => void;
 }
 
 const NoteForm = ({ onClose }: NoteFormProps) => {
   const queryClient = useQueryClient();
+
+  const router = useRouter();
 
   const addNoteMutation = useMutation({
     mutationFn: createNote,
@@ -38,7 +41,11 @@ const NoteForm = ({ onClose }: NoteFormProps) => {
       queryClient.invalidateQueries({
         queryKey: ['notes'],
       });
-      onClose();
+      if (onClose) {
+        onClose();
+      } else {
+        router.push('/notes/filter/all');
+      }
     },
     onError: (error) => {
       console.error('Error creating note:', error);

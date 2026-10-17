@@ -14,6 +14,7 @@ import Pagination from '@/components/Pagination/Pagination';
 import Modal from '@/components/Modal/Modal';
 import NoteForm from '@/components/NoteForm/NoteForm';
 import css from './Notes.module.css';
+import { useRouter } from 'next/navigation';
 
 export default function NotesClient({
   tag,
@@ -44,6 +45,8 @@ export default function NotesClient({
     placeholderData: keepPreviousData,
   });
 
+  const router = useRouter();
+
   const handleSearchChange = (query: string) => {
     setSearchQuery(query);
     setPage(1);
@@ -68,7 +71,9 @@ export default function NotesClient({
 
         <button
           className={css.createButton}
-          onClick={() => setIsModalOpen(true)}
+          onClick={() =>
+            router.push('/notes/action/create')
+          }
         >
           Create note +
         </button>
