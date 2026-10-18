@@ -21,11 +21,9 @@ export async function generateMetadata({
   const formattedTag =
     filterTag.charAt(0).toUpperCase() + filterTag.slice(1);
 
-  const pageTitle =
-    'Notes filtered by tag: ${formattedTag} | NoteHub';
+  const pageTitle = `Notes filtered by tag: ${formattedTag} | NoteHub`;
 
-  const pageDescription =
-    'View a list of notes filtrated by a category ${formattedTag}.';
+  const pageDescription = `View a list of notes filtrated by a category ${formattedTag}.`;
 
   return {
     title: pageTitle,

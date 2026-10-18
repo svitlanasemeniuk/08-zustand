@@ -6,15 +6,13 @@ import {
   keepPreviousData,
 } from '@tanstack/react-query';
 import { useDebounce } from 'use-debounce';
+import { useRouter } from 'next/navigation';
 
 import { fetchNotes } from '@/lib/api/notes';
 import NoteList from '@/components/NoteList/NoteList';
 import SearchBox from '@/components/SearchBox/SearchBox';
 import Pagination from '@/components/Pagination/Pagination';
-import Modal from '@/components/Modal/Modal';
-import NoteForm from '@/components/NoteForm/NoteForm';
 import css from './Notes.module.css';
-import { useRouter } from 'next/navigation';
 
 export default function NotesClient({
   tag,
@@ -23,12 +21,12 @@ export default function NotesClient({
 }) {
   const [page, setPage] = useState(1);
   const [searchQuery, setSearchQuery] = useState('');
-  const [isModalOpen, setIsModalOpen] = useState(false);
 
   const [debouncedSearchQuery] = useDebounce(
     searchQuery,
     500
   );
+  const router = useRouter();
 
   const {
     data: notesData,
@@ -45,16 +43,14 @@ export default function NotesClient({
     placeholderData: keepPreviousData,
   });
 
-  const router = useRouter();
-
   const handleSearchChange = (query: string) => {
     setSearchQuery(query);
     setPage(1);
   };
 
-  if (isLoading) return <p>Loading... ⏳</p>;
+  if (isLoading) return <p>Loading... </p>;
   if (isError || !notesData)
-    return <p>Ooops! Error loading../</p>;
+    return <p>Ooops! Error loading...</p>;
 
   return (
     <div className={css.container}>
@@ -83,15 +79,6 @@ export default function NotesClient({
         <NoteList notes={notesData.notes} />
       ) : (
         <p>Notes were not found...</p>
-      )}
-
-      {isModalOpen && (
-        <Modal
-          isOpen={isModalOpen}
-          onClose={() => setIsModalOpen(false)}
-        >
-          <NoteForm onClose={() => setIsModalOpen(false)} />
-        </Modal>
       )}
     </div>
   );

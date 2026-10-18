@@ -50,15 +50,11 @@ export default function NoteForm({
     },
   });
 
-  const handleAction = (formData: FormData) => {
-    const title = formData.get('title') as string;
-    const content = formData.get('content') as string;
-    const tag = formData.get('tag') as Note['tag'];
-
+  const handleAction = () => {
     addNoteMutation.mutate({
-      title,
-      content,
-      tag,
+      title: draft.title,
+      content: draft.content,
+      tag: draft.tag as Note['tag'],
     });
   };
 
@@ -85,6 +81,12 @@ export default function NoteForm({
           maxLength={50}
           className={css.input}
           placeholder="Enter note title..."
+          value={draft.title}
+          onChange={(e) =>
+            setDraft({
+              title: e.target.value,
+            })
+          }
         />
       </div>
 
@@ -99,6 +101,10 @@ export default function NoteForm({
           maxLength={500}
           className={css.textarea}
           placeholder="Write your note here..."
+          value={draft.content}
+          onChange={(e) =>
+            setDraft({ content: e.target.value })
+          }
         />
       </div>
 
@@ -109,8 +115,11 @@ export default function NoteForm({
         <select
           id="tag"
           name="tag"
-          defaultValue="Todo"
           className={css.select}
+          value={draft.tag}
+          onChange={(e) =>
+            setDraft({ tag: e.target.value })
+          }
         >
           {tags.map((tag) => (
             <option key={tag} value={tag}>
