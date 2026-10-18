@@ -14,13 +14,16 @@ export const fetchNotes = async ({
   page?: number;
   search?: string;
   tag?: string;
-}): Promise<FetchNotesResponse> => {
+} = {}): Promise<FetchNotesResponse> => {
   const params: Record<string, string | number> = {
     page,
-    search,
   };
 
-  if (tag !== 'all') {
+  if (search && search.trim() !== '') {
+    params.search = search.trim();
+  }
+
+  if (tag && tag.toLowerCase() !== 'all') {
     params.tag = tag;
   }
 

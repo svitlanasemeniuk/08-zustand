@@ -2,7 +2,7 @@ import Link from 'next/link';
 import css from '../../../../components/SidebarNotes/SidebarNotes.module.css';
 
 const tags = [
-  'To-Do',
+  'Todo',
   'Work',
   'Personal',
   'Meeting',
